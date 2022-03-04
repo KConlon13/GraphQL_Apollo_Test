@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^3.6.3"
+    "apollo-server": "^3.6.3",
+    "lodash": "^4.17.21"
   }
 }

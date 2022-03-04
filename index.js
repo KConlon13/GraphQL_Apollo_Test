@@ -1,60 +1,60 @@
 
 const { ApolloServer, gql } = require('apollo-server');
+const _ = require("lodash");
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-  # This "Book" type defines the queryable fields: 'title' and 'author'.
+  # TYPES
   type Book {
-    title: String
-    author: String
+    id: ID!
+    name: String!
+    authorId: Int!
+  }
+  type Author {
+      id: ID!
+      name: String!
   }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
+  # QUERY
   type Query {
-    books: [Book]
+    books: [Book!]!
+    book(id: ID!): Book
+    authors: [Author!]!
   }
+
 `;
 
-const books = [
-    {
-      title: 'The Great Gatsby',
-      author: 'F. Scott Fitzgerald',
-    },
-    {
-      title: 'Wuthering Heights',
-      author: 'Emily Brontë',
-    },
-    {
-      title: 'Harry Potter and the Prisoner of Azkaban',
-      author: 'J.K. Rowling',
-    },
-    {
-      title: 'Harry Potter and the Goblet of Fire',
-      author: 'J.K. Rowling',
-    },
-    {
-      title: 'Harry Potter and the Deathly Hallows',
-      author: 'J.K. Rowling',
-    },
-    {
-      title: 'The Hobbit',
-      author: 'J.R.R. Tolkien',
-    },
+const authorList = [
+    { id: 1, name: 'J.K. Rowling' },
+    { id: 2, name: 'J.R.R. Tolkien' },
+    { id: 3, name: 'Brent Weeks' }
+];
 
+const bookList = [
+    { id: 1, name: 'Harry Potter and the Chamber of Secrets', authorId: 1 },
+    { id: 2, name: 'Harry Potter and the Prisoner of Azkaban', authorId: 1 },
+    { id: 3, name: 'Harry Potter and the Goblet of Fire', authorId: 1 },
+    { id: 4, name: 'The Fellowship of the Ring', authorId: 2 },
+    { id: 5, name: 'The Two Towers', authorId: 2 },
+    { id: 6, name: 'The Return of the King', authorId: 2 },
+    { id: 7, name: 'The Way of Shadows', authorId: 3 },
+    { id: 8, name: 'Beyond the Shadows', authorId: 3 },
 ];
 
 // Resolvers define the technique for fetching the types defined in the schema.
 // This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
-      books: () => books,
-    },
+        books: () => bookList,
+        authors: () => authorList,
+        book(parent, args) {
+            const id = args.id;
+            const book = _.find(bookList, { id: Number(id)});
+            return book;
+        },
+    }
 };
 
 // The ApolloServer constructor requires two parameters: your schema
