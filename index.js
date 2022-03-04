@@ -30,6 +30,23 @@ const books = [
       title: 'Wuthering Heights',
       author: 'Emily Brontë',
     },
+    {
+      title: 'Harry Potter and the Prisoner of Azkaban',
+      author: 'J.K. Rowling',
+    },
+    {
+      title: 'Harry Potter and the Goblet of Fire',
+      author: 'J.K. Rowling',
+    },
+    {
+      title: 'Harry Potter and the Deathly Hallows',
+      author: 'J.K. Rowling',
+    },
+    {
+      title: 'The Hobbit',
+      author: 'J.R.R. Tolkien',
+    },
+
 ];
 
 // Resolvers define the technique for fetching the types defined in the schema.
