@@ -11,6 +11,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     authorId: Int!
+    author: [Author]
   }
   type Author {
       id: ID!
@@ -22,8 +23,8 @@ const typeDefs = gql`
     books: [Book!]!
     book(id: ID!): Book
     authors: [Author!]!
+    author(id: ID!): Author
   }
-
 `;
 
 const authorList = [
@@ -43,8 +44,7 @@ const bookList = [
     { id: 8, name: 'Beyond the Shadows', authorId: 3 },
 ];
 
-// Resolvers define the technique for fetching the types defined in the schema.
-// This resolver retrieves books from the "books" array above.
+// Resolvers define the technique for fetching the types defined in the schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
         books: () => bookList,
@@ -54,11 +54,15 @@ const resolvers = {
             const book = _.find(bookList, { id: Number(id)});
             return book;
         },
+        author(parent, args) {
+            const id = args.id;
+            const author = _.find(authorList, { id: Number(id)});
+            return author;
+        },
     }
 };
 
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
+// The ApolloServer constructor requires two parameters: your schema definition and your set of resolvers.
 const server = new ApolloServer({ typeDefs, resolvers });
 
 // The `listen` method launches a web server.
